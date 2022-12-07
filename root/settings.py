@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-#al^!ex$f^j_=l68mq&81p)bs(%6o0owi)+ft$*yd=(w=gv%sx"
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
     "notifications_api",
 ]
 
@@ -124,6 +126,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 10,
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 # Celery Configuration Options
@@ -134,3 +137,14 @@ CELERY_BROKER_URL = "amqp://127.0.0.1:5672/"
 CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379"
 CELERY_RESULT_SERIALIZER = "pickle"
 CELERY_ACCEPT_CONTENT = ["json", "pickle"]
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Notifications API",
+    "DESCRIPTION": "Project for message distribution",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_DIST": "SIDECAR",  # shorthand to use the sidecar instead
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
+    # OTHER SETTINGS
+}

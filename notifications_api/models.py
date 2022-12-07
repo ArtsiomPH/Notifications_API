@@ -25,7 +25,11 @@ class Distribution(models.Model):
 
     def start_mailing(self, msg):
         start_mailing_datetime = self.mailing_start + timedelta(seconds=10)
-        send_message.apply_async((msg, self.mailing_stop), eta=start_mailing_datetime, link_error=error_handling.s(msg))
+        send_message.apply_async(
+            (msg, self.mailing_stop),
+            eta=start_mailing_datetime,
+            link_error=error_handling.s(msg),
+        )
 
     def add_messages(self):
         clients = self.get_clients()
