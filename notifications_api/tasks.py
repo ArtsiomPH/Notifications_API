@@ -60,7 +60,8 @@ def make_request(msg):
     bind=True,
     autoretry_for=(ConnectionError, NewConnectionError),
     retry_backoff=True,
-    retry_kwargs={"max_retries": 5},
+    retry_kwargs={"max_retries": 7},
+    default_retry_delay=5 * 60
 )
 def send_message(self: Task, message, expires):
     update_message_sending_start(message)
